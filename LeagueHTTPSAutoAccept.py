@@ -58,8 +58,8 @@ def DoAccept(ready):
                         acceptResponse = session.post('https://127.0.0.1:%s/lol-matchmaking/v1/ready-check/accept' %
                                 port, data={}, auth=requests.auth.HTTPBasicAuth('riot', password))
                         if math.floor(acceptResponse.status_code / 100) == 2:
-                            print(current_time, "Match accepted!")
-                time.sleep(1.00)
+                            print(current_time, "Match accepted")
+                time.sleep(0.5)
         else:
             os.system("cls" if os.name == "nt" else "clear")
             print("Unknown command:", ready, "\n")
