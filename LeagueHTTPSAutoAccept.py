@@ -57,7 +57,7 @@ def DoAccept(ready):
                     if jsonResponse["state"] == "InProgress" and jsonResponse["playerResponse"] != "Accepted":
                         acceptResponse = session.post('https://127.0.0.1:%s/lol-matchmaking/v1/ready-check/accept' %
                                 port, data={}, auth=requests.auth.HTTPBasicAuth('riot', password))
-                        if math.floor(acceptResponse.status_code / 100) == 2:
+                        if acceptResponse.ok:
                             print(current_time, "Match accepted")
                 time.sleep(0.5)
         else:
