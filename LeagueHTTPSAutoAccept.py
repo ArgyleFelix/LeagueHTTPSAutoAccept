@@ -46,7 +46,7 @@ def DoAccept(ready):
             print('Press "Ctrl + C" to stop the script.\n')
 
             t = time.localtime()
-            current_time = time.strftime("%H:%M:", t)
+            current_time = time.strftime("%H:%M:%S:", t)
 
             while True:
                 checkResponse = session.get('https://127.0.0.1:%s/lol-matchmaking/v1/ready-check' %
