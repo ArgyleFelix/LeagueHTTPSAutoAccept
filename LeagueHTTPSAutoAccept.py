@@ -36,7 +36,8 @@ session.verify = False
 
 print(colored("Auto Accept is currently offline.", "red"))
 print('Press "Ctrl + C" to stop the script.')
-print('Type "start" to start the Auto Accept.\n')
+print('Type "start" to start the Auto Accept.')
+print(colored("\nPlease note that the script will crash if you close League.\n", "yellow"))
 
 def DoAccept(ready):
     try:
@@ -47,7 +48,7 @@ def DoAccept(ready):
 
             while True:
                 t = time.localtime()
-                current_time = time.strftime("%H:%M:%S:", t)
+                current_time = time.strftime(colored("%H:%M:%S:", "yellow"), t)
 
                 checkResponse = session.get('https://127.0.0.1:%s/lol-matchmaking/v1/ready-check' %
                         port, data={}, auth=requests.auth.HTTPBasicAuth("riot", password))
