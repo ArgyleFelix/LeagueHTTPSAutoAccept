@@ -45,10 +45,9 @@ def DoAccept(ready):
             print(colored("Auto Accept is currently active.", "green"))
             print('Press "Ctrl + C" to stop the script.\n')
 
-            t = time.localtime()
-            current_time = time.strftime("%H:%M:%S:", t)
-
             while True:
+                t = time.localtime()
+                current_time = time.strftime("%H:%M:%S:", t)
                 checkResponse = session.get('https://127.0.0.1:%s/lol-matchmaking/v1/ready-check' %
                         port, data={}, auth=requests.auth.HTTPBasicAuth("riot", password))
                 if checkResponse.ok:
