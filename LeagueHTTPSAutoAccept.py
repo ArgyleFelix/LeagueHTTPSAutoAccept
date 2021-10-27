@@ -48,6 +48,7 @@ def DoAccept(ready):
             while True:
                 t = time.localtime()
                 current_time = time.strftime("%H:%M:%S:", t)
+
                 checkResponse = session.get('https://127.0.0.1:%s/lol-matchmaking/v1/ready-check' %
                         port, data={}, auth=requests.auth.HTTPBasicAuth("riot", password))
                 if checkResponse.ok:
@@ -57,6 +58,7 @@ def DoAccept(ready):
                                 port, data={}, auth=requests.auth.HTTPBasicAuth("riot", password))
                         if acceptResponse.ok:
                             print(current_time, "Match accepted")
+                            
                 time.sleep(0.5)
         else:
             os.system("cls" if os.name == "nt" else "clear")
