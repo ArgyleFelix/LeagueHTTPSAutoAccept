@@ -90,12 +90,12 @@ def DoAccept(ready):
                     t = time.localtime()
                     current_time = time.strftime("%H:%M:%S:", t)
 
-                    checkResponse = session.get('https://127.0.0.1:%s/lol-matchmaking/v1/ready-check' %
+                    checkResponse = session.get("https://127.0.0.1:%s/lol-matchmaking/v1/ready-check" %
                             port, data={}, auth=requests.auth.HTTPBasicAuth("riot", password))
                     if checkResponse.ok:
                         jsonResponse = json.loads(checkResponse.text)
                         if jsonResponse["state"] == "InProgress" and jsonResponse["playerResponse"] != "Accepted":
-                            acceptResponse = session.post('https://127.0.0.1:%s/lol-matchmaking/v1/ready-check/accept' %
+                            acceptResponse = session.post("https://127.0.0.1:%s/lol-matchmaking/v1/ready-check/accept" %
                                     port, data={}, auth=requests.auth.HTTPBasicAuth("riot", password))
                             if acceptResponse.ok:
                                 print(current_time, colored("Match accepted", "green"))
