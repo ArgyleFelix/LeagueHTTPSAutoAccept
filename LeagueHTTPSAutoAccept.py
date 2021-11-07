@@ -5,7 +5,6 @@ import os
 import time
 import json
 import psutil
-from requests.sessions import session
 from termcolor import colored
 try:
     import requests
