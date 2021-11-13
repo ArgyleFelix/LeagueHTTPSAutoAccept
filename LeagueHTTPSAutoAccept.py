@@ -58,7 +58,7 @@ def TimeConverter(sec):
 leaguecheck = "LeagueClientUx.exe" in (p.name() for p in psutil.process_iter())
 
 def SecondProcessCheck():
-    for c in itertools.cycle([".", "..", "..."]):
+    for c in itertools.cycle(["", ".", "..", "..."]):
         leaguecheck = "LeagueClientUx.exe" in (p.name() for p in psutil.process_iter())
         os.system("cls" if os.name == "nt" else "clear")
         output = "Waiting for League" + c
