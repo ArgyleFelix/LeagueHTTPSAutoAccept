@@ -16,12 +16,11 @@ except ModuleNotFoundError:
 start_time = time.time()
 os.system("cls" if os.name == "nt" else "clear")
 
-def launchercheck():
+def processcheck():
     try:
         command = "WMIC PROCESS WHERE name='LeagueClientUx.exe' GET commandline"
 
-        output = subprocess.Popen(command, stdout=subprocess.PIPE,
-                                        shell=True).stdout.read().decode('utf-8')
+        output = subprocess.Popen(command, stdout=subprocess.PIPE, shell=True).stdout.read().decode("utf-8")
 
         port = re.findall(r'"--app-port=(.*?)"', output)[0]
         password = re.findall(r'"--remoting-auth-token=(.*?)"', output)[0]
@@ -48,7 +47,7 @@ def countdown(t):
     print("Press", colored('"Ctrl + C"', "red"), "to stop the script.\n")
 
 
-def time_converter(sec):
+def TimeConverter(sec):
     mins = sec // 60
     sec = sec % 60
     hours = mins // 60
@@ -56,11 +55,11 @@ def time_converter(sec):
     print("Program was running for {0}h:{1}m:{2}s".format(int(hours),int(mins),int(sec)))
 
 
-leaguecheck = "LeagueClient.exe" in (p.name() for p in psutil.process_iter())
+leaguecheck = "LeagueClientUx.exe" in (p.name() for p in psutil.process_iter())
 
-def firstleaguecheck():
+def SecondProcessCheck():
     for c in itertools.cycle([".", "..", "..."]):
-        leaguecheck = "LeagueClient.exe" in (p.name() for p in psutil.process_iter())
+        leaguecheck = "LeagueClientUx.exe" in (p.name() for p in psutil.process_iter())
         os.system("cls" if os.name == "nt" else "clear")
         output = "Waiting for League" + c
         print(colored(output, "yellow"))
@@ -68,10 +67,10 @@ def firstleaguecheck():
             countdown(15)
             break
 
-def leaguecheckfunc():
-    leaguecheck = "LeagueClient.exe" in (p.name() for p in psutil.process_iter())
+def ThirdProcessCheck():
+    leaguecheck = "LeagueClientUx.exe" in (p.name() for p in psutil.process_iter())
     if leaguecheck == False:
-        firstleaguecheck()
+        SecondProcessCheck()
 
 os.system("cls" if os.name == "nt" else "clear")
 print(colored("Auto Accept is currently disabled.\n", "red"))
@@ -87,19 +86,17 @@ def DoAccept(ready):
             print("Press", colored('"Ctrl + C"', "red"), "to stop the script.\n")
 
             while True:
-                leaguecheckfunc()
-                port, password, session = launchercheck()
+                ThirdProcessCheck()
+                port, password, session = processcheck()
                 if port != 0:
                     t = time.localtime()
                     current_time = time.strftime("%H:%M:%S:", t)
 
-                    checkResponse = session.get("https://127.0.0.1:%s/lol-matchmaking/v1/ready-check" %
-                            port, data={}, auth=requests.auth.HTTPBasicAuth("riot", password))
+                    checkResponse = session.get("https://127.0.0.1:%s/lol-matchmaking/v1/ready-check" % port, data={}, auth=requests.auth.HTTPBasicAuth("riot", password))
                     if checkResponse.ok:
                         jsonResponse = json.loads(checkResponse.text)
                         if jsonResponse["state"] == "InProgress" and jsonResponse["playerResponse"] != "Accepted":
-                            acceptResponse = session.post("https://127.0.0.1:%s/lol-matchmaking/v1/ready-check/accept" %
-                                    port, data={}, auth=requests.auth.HTTPBasicAuth("riot", password))
+                            acceptResponse = session.post("https://127.0.0.1:%s/lol-matchmaking/v1/ready-check/accept" % port, data={}, auth=requests.auth.HTTPBasicAuth("riot", password))
                             if acceptResponse.ok:
                                 print(current_time, colored("Match accepted", "green"))
                                 
@@ -117,7 +114,7 @@ def DoAccept(ready):
         print(colored("Auto Accept has been closed.\n", "red"))
         end_time = time.time()
         time_lapsed = end_time - start_time
-        time_converter(time_lapsed)
+        TimeConverter(time_lapsed)
         pass
 
 DoAccept(input())
