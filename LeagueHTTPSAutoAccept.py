@@ -12,9 +12,19 @@ try:
 except ModuleNotFoundError:
     input()
     exit()
+import types
+import sys
+
+sys.modules['pythonisshit'] = types.ModuleType('pythonisshit')
+sys.modules['pythonisshit'].__dict__.update({'print_mode': 0, 'username': ''})
+
+import pythonisshit
+
+def ClearConsole():
+    os.system("cls" if os.name == "nt" else "clear")
 
 start_time = time.time()
-os.system("cls" if os.name == "nt" else "clear")
+ClearConsole()
 
 def processcheck():
     try:
@@ -38,14 +48,11 @@ def countdown(t):
         time.sleep(1)
         t -= 1
         os.system("cls" if os.name == "nt" else "clear")
-        if t <= 1:
+        if t == 1:
             print(colored("League found.", "green"), "Please wait", colored(t, "yellow"), "second.")
         else:
             print(colored("League found.", "green"), "Please wait", colored(t, "yellow"), "seconds.")
-    os.system("cls" if os.name == "nt" else "clear")
-    print(colored("Auto Accept is currently active.", "green"))
-    print("Press", colored('"Ctrl + C"', "red"), "to stop the script.\n")
-
+    PrintActiveNotice(True)
 
 def TimeConverter(sec):
     mins = sec // 60
@@ -54,15 +61,36 @@ def TimeConverter(sec):
     mins = mins % 60
     print("Program was running for {0}h:{1}m:{2}s".format(int(hours),int(mins),int(sec)))
 
+def PrintUsername():
+    if pythonisshit.username != "":
+        print("Welcome", colored(pythonisshit.username, "yellow"))
+
+def PrintActiveNotice(omitclear):
+    pythonisshit.print_mode = 1
+    if omitclear == False:
+        ClearConsole()
+    PrintUsername()
+    print(colored("Auto Accept is currently active.", "green"))
+    print("Press", colored('"Ctrl + C"', "red"), "to stop the script.\n")
+
+def PrintStoppedNotice(omitclear):
+    pythonisshit.print_mode = 0
+    if omitclear == False:
+        ClearConsole()
+    PrintUsername()
+    print(colored("Auto Accept is currently disabled.\n", "red"))
+    print("Type", colored('"start"', "green"), "to start the Auto Accept.")
+    print("Press", colored('"Ctrl + C"', "red"), "to stop the script.\n")
 
 leaguecheck = "LeagueClientUx.exe" in (p.name() for p in psutil.process_iter())
 
 def SecondProcessCheck():
     for c in itertools.cycle(["", ".", "..", "..."]):
         leaguecheck = "LeagueClientUx.exe" in (p.name() for p in psutil.process_iter())
-        os.system("cls" if os.name == "nt" else "clear")
+        ClearConsole()
         output = "Waiting for League" + c
         print(colored(output, "yellow"))
+        pythonisshit.username = ""
         if leaguecheck == True:
             countdown(15)
             break
@@ -72,19 +100,12 @@ def ThirdProcessCheck():
     if leaguecheck == False:
         SecondProcessCheck()
 
-os.system("cls" if os.name == "nt" else "clear")
-print(colored("Auto Accept is currently disabled.\n", "red"))
-print("Type", colored('"start"', "green"), "to start the Auto Accept.")
-print("Press", colored('"Ctrl + C"', "red"), "to stop the script.\n")
-
+PrintStoppedNotice(False)
 
 def DoAccept(ready):
     try:
         if ready == "start":
-            os.system("cls" if os.name == "nt" else "clear")
-            print(colored("Auto Accept is currently active.", "green"))
-            print("Press", colored('"Ctrl + C"', "red"), "to stop the script.\n")
-
+            PrintActiveNotice(False)
             while True:
                 ThirdProcessCheck()
                 port, password, session = processcheck()
@@ -92,6 +113,24 @@ def DoAccept(ready):
                     t = time.localtime()
                     current_time = time.strftime("%H:%M:%S:", t)
 
+                    username = session.get('https://127.0.0.1:%s/lol-summoner/v1/current-summoner' % port, data={}, auth=requests.auth.HTTPBasicAuth("riot", password))
+                    username = json.loads(username.text)
+                    if username != None and username != "":
+                        if "displayName" in username:
+                            if username["displayName"] != "":
+                                if username["displayName"] != pythonisshit.username:
+                                    pythonisshit.username = username["displayName"]
+                                    if pythonisshit.print_mode == 0:
+                                        PrintStoppedNotice(False)
+                                    else:
+                                        PrintActiveNotice(False)
+                        else:
+                            if pythonisshit.username != "":
+                                pythonisshit.username = ""
+                                if pythonisshit.print_mode == 0:
+                                    PrintStoppedNotice(False)
+                                else:
+                                    PrintActiveNotice(False)
                     checkResponse = session.get("https://127.0.0.1:%s/lol-matchmaking/v1/ready-check" % port, data={}, auth=requests.auth.HTTPBasicAuth("riot", password))
                     if checkResponse.ok:
                         jsonResponse = json.loads(checkResponse.text)
@@ -102,7 +141,8 @@ def DoAccept(ready):
                                 
                     time.sleep(0.5)
         else:
-            os.system("cls" if os.name == "nt" else "clear")
+            ClearConsole()
+            PrintUsername()
             print(colored("Unknown command:", "red"), ready, "\n")
             print("Type", colored('"start"', "green"), "to start the Auto Accept.")
             print("Press", colored('"Ctrl + C"', "red"), "to stop the script.\n")
@@ -110,7 +150,7 @@ def DoAccept(ready):
             DoAccept(NewInput)
 
     except KeyboardInterrupt:
-        os.system("cls" if os.name == "nt" else "clear")
+        ClearConsole()
         print(colored("Auto Accept has been closed.\n", "red"))
         end_time = time.time()
         time_lapsed = end_time - start_time
