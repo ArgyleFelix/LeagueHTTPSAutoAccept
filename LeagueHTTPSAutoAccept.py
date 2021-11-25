@@ -47,12 +47,12 @@ def countdown(t):
     while t:
         time.sleep(1)
         t -= 1
-        os.system("cls" if os.name == "nt" else "clear")
+        ClearConsole()
         if t == 1:
             print(colored("League found.", "green"), "Please wait", colored(t, "yellow"), "second.")
         else:
             print(colored("League found.", "green"), "Please wait", colored(t, "yellow"), "seconds.")
-    PrintActiveNotice(True)
+    PrintActiveNotice(False)
 
 def TimeConverter(sec):
     mins = sec // 60
