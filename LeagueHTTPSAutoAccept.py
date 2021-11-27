@@ -16,7 +16,7 @@ import types
 import sys
 
 sys.modules["usernamemodule"] = types.ModuleType("usernamemodule")
-sys.modules["usernamemodule"].__dict__.update({"print_mode": 0, "username2": ""})
+sys.modules["usernamemodule"].__dict__.update({"print_mode": 0, "username": ""})
 
 import usernamemodule
 
