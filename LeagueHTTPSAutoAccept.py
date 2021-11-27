@@ -15,10 +15,10 @@ except ModuleNotFoundError:
 import types
 import sys
 
-sys.modules['pythonisshit'] = types.ModuleType('pythonisshit')
-sys.modules['pythonisshit'].__dict__.update({'print_mode': 0, 'username': ''})
+sys.modules["usernamemodule"] = types.ModuleType("usernamemodule")
+sys.modules["usernamemodule"].__dict__.update({"print_mode": 0, "username2": ""})
 
-import pythonisshit
+import usernamemodule
 
 def ClearConsole():
     os.system("cls" if os.name == "nt" else "clear")
@@ -62,11 +62,11 @@ def TimeConverter(sec):
     print("Program was running for {0}h:{1}m:{2}s".format(int(hours),int(mins),int(sec)))
 
 def PrintUsername():
-    if pythonisshit.username != "":
-        print("Welcome", colored(pythonisshit.username, "yellow"))
+    if usernamemodule.username != "":
+        print("Welcome", colored(usernamemodule.username, "yellow"))
 
 def PrintActiveNotice(omitclear):
-    pythonisshit.print_mode = 1
+    usernamemodule.print_mode = 1
     if omitclear == False:
         ClearConsole()
     PrintUsername()
@@ -74,7 +74,7 @@ def PrintActiveNotice(omitclear):
     print("Press", colored('"Ctrl + C"', "red"), "to stop the script.\n")
 
 def PrintStoppedNotice(omitclear):
-    pythonisshit.print_mode = 0
+    usernamemodule.print_mode = 0
     if omitclear == False:
         ClearConsole()
     PrintUsername()
@@ -90,7 +90,7 @@ def SecondProcessCheck():
         ClearConsole()
         output = "Waiting for League" + c
         print(colored(output, "yellow"))
-        pythonisshit.username = ""
+        usernamemodule.username = ""
         if leaguecheck == True:
             countdown(15)
             break
@@ -118,16 +118,16 @@ def DoAccept(ready):
                     if username != None and username != "":
                         if "displayName" in username:
                             if username["displayName"] != "":
-                                if username["displayName"] != pythonisshit.username:
-                                    pythonisshit.username = username["displayName"]
-                                    if pythonisshit.print_mode == 0:
+                                if username["displayName"] != usernamemodule.username:
+                                    usernamemodule.username = username["displayName"]
+                                    if usernamemodule.print_mode == 0:
                                         PrintStoppedNotice(False)
                                     else:
                                         PrintActiveNotice(False)
                         else:
-                            if pythonisshit.username != "":
-                                pythonisshit.username = ""
-                                if pythonisshit.print_mode == 0:
+                            if usernamemodule.username != "":
+                                usernamemodule.username = ""
+                                if usernamemodule.print_mode == 0:
                                     PrintStoppedNotice(False)
                                 else:
                                     PrintActiveNotice(False)
