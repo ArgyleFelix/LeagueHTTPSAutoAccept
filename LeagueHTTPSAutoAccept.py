@@ -70,7 +70,7 @@ def PrintActiveNotice(omitclear):
     if omitclear == False:
         ClearConsole()
     PrintUsername()
-    print(colored("Auto Accept is currently active.", "green"))
+    print(colored("Auto Accept is currently active.\n", "green"))
     print("Press", colored('"Ctrl + C"', "red"), "to stop the script.\n")
 
 def PrintStoppedNotice(omitclear):
