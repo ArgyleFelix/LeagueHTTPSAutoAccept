@@ -6,12 +6,8 @@ import time
 import json
 import psutil
 from termcolor import colored
-try:
-    import requests
-    import urllib3
-except ModuleNotFoundError:
-    input()
-    exit()
+import requests
+import urllib3
 import types
 import sys
 
